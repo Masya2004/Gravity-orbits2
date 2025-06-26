@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌟 Gravity & Orbits - Interactive Simulation</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+</head>
+<body>
+    <header class="header">
+        <h1><img src="star-smile.png" alt="Smiling Star"> GRAVITY AND ORBITS</h1>
+        <p>Interactive simulation of cosmic systems with educational features</p>
+        <div class="header-decoration">
+            <div class="cosmic-particles"></div>
+        </div>
+    </header>
+
+    <main class="main-container horizontal-layout">
+        <section class="simulation-area">
+            <canvas id="canvas" width="2400" height="1100" style="max-width:99vw; max-height:90vh; width:99vw; height:90vh; display:block; margin:0 auto;"></canvas>
+            <button id="helpBtn" class="help-btn" title="Show tips">?</button>
+            <div class="help-text" id="helpText" style="display:none;">
+                <p><strong>💡 Tips:</strong></p>
+                <p>• Click an object to select it</p>
+                <p>• Drag to move the camera</p>
+                <p>• Use the mouse wheel to zoom</p>
+                <p>• Add objects using the buttons below</p>
+            </div>
+            <div id="contextMenu" class="context-menu" style="display:none; position:absolute; z-index:1000;">
+                <div class="context-tabs">
+                    <button class="context-tab active" data-tab="add">Add Objects</button>
+                    <button class="context-tab" data-tab="scenarios">Scenarios</button>
+                    <button class="context-tab" data-tab="settings">Settings</button>
+                </div>
+                <div class="context-content" id="contextAdd" style="display:block;">
+                    <button class="context-action" data-action="addStar">⭐ Star</button>
+                    <button class="context-action" data-action="addPlanet">🪐 Planet</button>
+                    <button class="context-action" data-action="addMoon">🌙 Moon</button>
+                    <button class="context-action" data-action="addAsteroid">☄️ Asteroid</button>
+                    <button class="context-action" data-action="addComet">💫 Comet</button>
+                </div>
+                <div class="context-content" id="contextScenarios" style="display:none;">
+                    <button class="context-action" data-action="earthSun">🌍 Earth-Sun</button>
+                    <button class="context-action" data-action="earthMoon">🌍🌙 Earth-Moon</button>
+                    <button class="context-action" data-action="solarSystem">☀️ Solar System</button>
+                    <button class="context-action" data-action="binaryStar">⭐ Binary Star</button>
+                    <button class="context-action" data-action="spaceStation">🛰️ Space Station</button>
+                    <button class="context-action" data-action="chaotic">🌀 Chaotic System</button>
+                    <button class="context-action" data-action="asteroidBelt">💫 Asteroid Belt</button>
+                    <button class="context-action" data-action="starCluster">🌌 Star Cluster</button>
+                    <button class="context-action" data-action="comet">☄️ Comet</button>
+                    <button class="context-action" data-action="chaosMany">🌠 Many-Body Chaos</button>
+                </div>
+                <div class="context-content" id="contextSettings" style="display:none;">
+                    <button class="context-action" data-action="toggleTrails">🌊 Toggle Trails</button>
+                    <button class="context-action" data-action="toggleGrid">📐 Toggle Grid</button>
+                    <button class="context-action" data-action="toggleVectors">➡️ Toggle Vectors</button>
+                    <button class="context-action" data-action="toggleInfo">ℹ️ Toggle Info</button>
+                    <button class="context-action" data-action="reset">🔄 Reset</button>
+                    <button class="context-action" data-action="clear">🗑️ Clear</button>
+                </div>
+            </div>
+        </section>
+        <section class="controls-tabs">
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="controlsTab"> Controls</button>
+                <button class="tab-btn" data-tab="addTab">➕ Add Objects</button>
+                <button class="tab-btn" data-tab="scenariosTab">📚 Scenarios</button>
+                <button class="tab-btn" data-tab="settingsTab">⚙️ Settings</button>
+                <button class="tab-btn" data-tab="statsTab">📊 Statistics</button>
+                <button class="tab-btn" data-tab="eduTab">📖 Education</button>
+            </div>
+            <div class="tab-content active" id="controlsTab">
+                <div class="button-group">
+                    <button id="playPauseBtn" class="btn primary">⏸️ Pause</button>
+                    <button id="resetBtn" class="btn secondary">🔄 Reset</button>
+                    <button id="clearBtn" class="btn secondary">🗑️ Clear</button>
+                </div>
+            </div>
+            <div class="tab-content" id="addTab">
+                <div class="button-group">
+                    <button id="addStarBtn" class="btn star">⭐ Star</button>
+                    <button id="addPlanetBtn" class="btn planet">🪐 Planet</button>
+                    <button id="addMoonBtn" class="btn moon">🌙 Moon</button>
+                    <button id="addAsteroidBtn" class="btn asteroid">☄️ Asteroid</button>
+                    <button id="addCometBtn" class="btn comet">💫 Comet</button>
+                </div>
+            </div>
+            <div class="tab-content" id="scenariosTab">
+                <div class="button-group">
+                    <button id="earthSunBtn" class="btn scenario">🌍 Earth-Sun</button>
+                    <button id="earthMoonBtn" class="btn scenario">🌍🌙 Earth-Moon</button>
+                    <button id="solarSystemBtn" class="btn scenario">☀️ Solar System</button>
+                    <button id="binaryStarBtn" class="btn scenario">⭐ Binary Star</button>
+                    <button id="spaceStationBtn" class="btn scenario">🛰️ Space Station</button>
+                    <button id="chaoticBtn" class="btn scenario">🌀 Chaotic System</button>
+                    <button id="asteroidBeltBtn" class="btn scenario">💫 Asteroid Belt</button>
+                    <button id="starClusterBtn" class="btn scenario">🌌 Star Cluster</button>
+                    <button id="cometBtn" class="btn scenario">☄️ Comet</button>
+                    <button id="chaosManyBtn" class="btn scenario">🌠 Many-Body Chaos</button>
+                </div>
+            </div>
+            <div class="tab-content" id="settingsTab">
+                <div class="setting-group">
+                    <label>
+                        <span>🌍 Gravity:</span>
+                        <input type="range" id="gravitySlider" min="0.01" max="1" step="0.01" value="0.2">
+                        <span id="gravityValue">0.20</span>
+                    </label>
+                </div>
+                <div class="setting-group">
+                    <label>
+                        <span>⏱️ Time Speed:</span>
+                        <input type="range" id="timeScaleSlider" min="0.1" max="5" step="0.1" value="1">
+                        <span id="timeScaleValue">1.0x</span>
+                    </label>
+                </div>
+                <div class="setting-group">
+                    <label>
+                        <input type="checkbox" id="trailToggle" checked>
+                        <span>🌊 Show Trails</span>
+                    </label>
+                </div>
+                <div class="setting-group">
+                    <label>
+                        <input type="checkbox" id="gridToggle">
+                        <span>📐 Show Grid</span>
+                    </label>
+                </div>
+                <div class="setting-group">
+                    <label>
+                        <input type="checkbox" id="vectorsToggle">
+                        <span>➡️ Show Force Vectors</span>
+                    </label>
+                </div>
+                <div class="setting-group">
+                    <label>
+                        <input type="checkbox" id="infoToggle" checked>
+                        <span>ℹ️ Show Info</span>
+                    </label>
+                </div>
+            </div>
+            <div class="tab-content" id="statsTab">
+                <div class="info-panel">
+                    <h3>📊 Statistics</h3>
+                    <p><strong>Objects:</strong> <span id="objectCount">3</span></p>
+                    <p><strong>Time:</strong> <span id="timeDisplay">0.0</span> s</p>
+                    <p><strong>FPS:</strong> <span id="fpsDisplay">60</span></p>
+                    <p><strong>System Energy:</strong> <span id="energyDisplay">0.0</span></p>
+                    <div id="selectedObjectInfo" class="selected-info" style="display: none;">
+                        <h4>🎯 Selected Object</h4>
+                        <div id="objectDetails">
+                            <p>Click an object to get information</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="graph-panel horizontal-graphs">
+                    <h3>📈 Data Analysis</h3>
+                    <div class="graph-container horizontal-graphs">
+                        <canvas id="energyGraph" width="320" height="150"></canvas>
+                        <canvas id="distanceGraph" width="320" height="150"></canvas>
+                    </div>
+                    <div class="data-insights">
+                        <h4>🔍 System Analysis</h4>
+                        <div class="insight-item">
+                            <span class="insight-label">Orbit Stability:</span>
+                            <span class="insight-value" id="stabilityIndicator">Stable</span>
+                        </div>
+                        <div class="insight-item">
+                            <span class="insight-label">Center of Mass:</span>
+                            <span class="insight-value" id="centerOfMass">Calculating...</span>
+                        </div>
+                        <div class="insight-item">
+                            <span class="insight-label">Orbital Period:</span>
+                            <span class="insight-value" id="orbitalPeriod">~2.5 s</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-content" id="eduTab">
+                <div class="mode-selector">
+                    <button id="introMode" class="mode-btn active">Introduction</button>
+                    <button id="labMode" class="mode-btn">Lab</button>
+                    <button id="quizMode" class="mode-btn">Quiz</button>
+                </div>
+                <div id="introPanel" class="education-panel active">
+                    <h4>🌟 Welcome to the World of Gravity!</h4>
+                    <p>This simulation will help you understand the basic principles of gravity and orbital motion.</p>
+                    <ul>
+                        <li>Add stars, planets, and moons</li>
+                        <li>Observe their interactions</li>
+                        <li>Explore Kepler's laws</li>
+                        <li>Analyze the system's energy</li>
+                    </ul>
+                    <div class="concept-box">
+                        <strong>🔬 Newton's Law of Universal Gravitation:</strong>
+                        <p>F = G × (m₁ × m₂) / r²</p>
+                        <p>G - gravitational constant</p>
+                        <p>m₁, m₂ - masses of the bodies</p>
+                        <p>r - distance between centers of mass</p>
+                    </div>
+                </div>
+                <div id="labPanel" class="education-panel">
+                    <h4>🧪 Lab Experiments</h4>
+                    <p>Conduct your own gravity experiments:</p>
+                    <ul>
+                        <li>Create a stable orbital system</li>
+                        <li>Explore the effect of mass on orbits</li>
+                        <li>Observe energy conservation</li>
+                        <li>Study the effect of initial velocity</li>
+                    </ul>
+                    <div class="concept-box">
+                        <strong>⚡ Energy Conservation:</strong>
+                        <p>E = K + U = const</p>
+                        <p>Kinetic + Potential = Constant</p>
+                        <p>This is a fundamental law of physics!</p>
+                    </div>
+                </div>
+                <div id="quizPanel" class="education-panel">
+                    <h4>❓ Test Your Knowledge</h4>
+                    <p>Answer questions about gravity and orbits:</p>
+                    <div id="quizQuestion">
+                        <p>Click "New Question" to start the quiz</p>
+                    </div>
+                    <button id="newQuizBtn" class="btn primary" onclick="loadNewQuizQuestion()">🔄 New Question</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Additional elements for rich design -->
+    <div class="floating-elements">
+        <div class="floating-star" style="top: 10%; left: 5%;"></div>
+        <div class="floating-star" style="top: 20%; right: 8%;"></div>
+        <div class="floating-star" style="bottom: 15%; left: 12%;"></div>
+        <div class="floating-star" style="bottom: 25%; right: 15%;"></div>
+    </div>
+
+    <div class="cosmic-background">
+        <div class="nebula nebula-1"></div>
+        <div class="nebula nebula-2"></div>
+        <div class="nebula nebula-3"></div>
+    </div>
+
+    <script src="presets.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
